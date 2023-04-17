@@ -19,5 +19,5 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helmGenerator.createHelmChart(app)
+	createHelmChart(app)
 }

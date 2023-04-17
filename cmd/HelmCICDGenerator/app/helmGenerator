@@ -1,4 +1,4 @@
-package helmGenerator
+package app
 
 type Config struct {
 	HelmPath string
