@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/xgolis/HelmCICDGenerator/cmd/HelmCICDGenerator/app"
+)
 
 func main() {
-	fmt.Printf("kokot")
+	app := app.NewApp()
+
+	fmt.Printf("[Server] Up and running on %s\n", app.Server.Addr)
+	http.ListenAndServe(app.Server.Addr, app.Server.Handler)
 }

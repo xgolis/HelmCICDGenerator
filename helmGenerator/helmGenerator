@@ -1,0 +1,9 @@
+package helmGenerator
+
+type Config struct {
+	HelmPath string
+}
+
+func createHelmChart(app) {
+
+}
