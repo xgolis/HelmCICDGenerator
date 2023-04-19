@@ -1,13 +1,13 @@
 stages:
-  - lint
-  - build
-  - deploy
+- lint
+- build
+- deploy
 
 variables:
-  IMAGE_NAME: PLACEHOLDER_IMAGE
-  NAMESPACE: PLACEHOLDER_NAMESPACE
-  APPNAME: PLACEHOLDER_APPNAME
-  
+  IMAGE_NAME: gog:1.8
+  NAMESPACE: jojo
+  APPNAME: kkt
+
 # build_image:
 #   stage: build
 # # https://www.youtube.com/watch?v=qP8kir2GUgo&ab_channel=TechWorldwithNana
@@ -18,12 +18,10 @@ variables:
 #     DOCKER_TLS_CERTDIR: "/certs"
 #   script:
 #     - docker login -u $DOCKER_USER -p $DOCKER_PASS
-#     - docker build -t $DOCKER_USER/$IMAGE_NAME:latest .
-#     - docker push $DOCKER_USER/$IMAGE_NAME:latest
-  
+#     - docker build -t $DOCKER_USER/$IMAGE_NAME .
+#     - docker push $DOCKER_USER/$IMAGE_NAME
+
 deploy:
   stage: deploy
   image: dtzar/helm-kubectl:3.11.2
-  script:
-    kubectl -u url -p -n 
-    helm upgrade 
+  script: kubectl -u url -p -n helm upgrade

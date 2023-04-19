@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  name:
+  fullImage: gog:1.8
   # repository: nginx
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
@@ -39,7 +39,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  # port: 80
+  port: 80
 
 # ingress:
 #   enabled: false
