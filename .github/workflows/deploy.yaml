@@ -1,0 +1,58 @@
+name: CI
+
+env:
+  NAMESPACE: change me 
+  APPNAME: change me
+
+on: [push]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+          # ADD YOUR DOCKER USERNAME AND DOCKER TOKEN INTO GITLAB VARIABLES
+          # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/$APPNAME:latest
+
+  deploy:
+    runs-on: ubuntu-22.04
+    container:
+      image: xgolis/deployimage:latest
+    steps:
+      -
+        name: Deployment
+        run: |
+          sudo scp -i ./.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube/config
+          sudo kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
+          sudo kubectl config set-cluster kubernetes --insecure-skip-tls-verify
+          kubectl get pods --namespace=$NAMESPACE
+          
+          helm upgrade $APPNAME
+          ./helm/$APPNAME
+          --install
+          -n $NAMESPACE
+          --set "image.fullImage=${{ secrets.DOCKERHUB_USERNAME }}/$APPNAME:latest"
+          --set "app.namespace=$NAMESPACE"
+          --set "app.examplePassword=pass"
+        # --set-file "app.exampleConfig=/path/to/config"

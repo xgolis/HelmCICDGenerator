@@ -4,7 +4,6 @@ stages:
 - deploy
 
 variables:
-  IMAGE_NAME: gog:1.8
   NAMESPACE: jojo
   APPNAME: kkt
 
@@ -17,9 +16,11 @@ build_image:
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   script:
+  # ADD YOUR DOCKER USERNAME AND DOCKER PASS INTO GITLAB VARIABLES
+  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - docker build -t $DOCKER_USER/$IMAGE_NAME .
-  - docker push $DOCKER_USER/$IMAGE_NAME
+  - docker build -t $DOCKER_USER/$APPNAME .
+  - docker push $DOCKER_USER/$APPNAME:latest
 
 deploy:
   stage: deploy
@@ -33,7 +34,8 @@ deploy:
   - helm upgrade $APPNAME 
     ./helm/$APPNAME 
     --install 
-    -n $NAMESPACE 
+    -n $NAMESPACE
+    --set "image.fullImage=$DOCKER_USER/$APPNAME:latest"
     --set "app.namespace=$NAMESPACE" 
     --set "app.examplePassword='pass'"
   # --set-file "app.exampleConfig="/path/to/config""
