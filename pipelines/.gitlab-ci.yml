@@ -26,9 +26,9 @@ deploy:
   stage: deploy
   image: xgolis/deployimage:latest
   script:
-  - sudo scp -i ./.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube/config
-  - sudo kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
-  - sudo kubectl config set-cluster kubernetes --insecure-skip-tls-verify
+  - scp -i ./.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube/config
+  - kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
+  - kubectl config set-cluster kubernetes --insecure-skip-tls-verify
   - kubectl get pods --namespace=$NAMESPACE
   # Add values to to helm upgrade if needed
   - helm upgrade $APPNAME 
