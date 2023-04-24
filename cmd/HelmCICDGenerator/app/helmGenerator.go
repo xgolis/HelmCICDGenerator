@@ -61,7 +61,10 @@ func changeValuesChart(prefix string, app UserApp) error {
 	for i, line := range lines {
 		if strings.Contains(line, "fullImage:") {
 			lines[i] = "  fullImage: " + app.Image
-			fmt.Printf(lines[i])
+			// fmt.Printf(lines[i])
+		}
+		if strings.Contains(line, " nodePort:") {
+			lines[i] = "  nodePort: " + app.Port
 		}
 	}
 	output := strings.Join(lines, "\n")

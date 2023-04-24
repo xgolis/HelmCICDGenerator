@@ -1,15 +1,23 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm.fullname" . }}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    app: {{ include "helm.fullname" . }}
+  name: {{ include "helm.fullname" . }}
+  namespace: {{ .Values.app.namespace }}
 spec:
-  type: {{ .Values.service.type }}
+  allocateLoadBalancerNodePorts: true
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+  - nodePort: {{ .Values.app.nodePort }}
+    port: {{ .Values.service.port }}
+    protocol: TCP
+    targetPort: {{ .Values.service.port }}
   selector:
-    {{- include "helm.selectorLabels" . | nindent 4 }}
+    app: {{ include "helm.fullname" . }}
+  sessionAffinity: None
+  type: LoadBalancer

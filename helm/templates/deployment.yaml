@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: v1
 kind: Deployment
 metadata:
   name: {{ include "helm.fullname" . }}
@@ -32,20 +32,36 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.fullImage }}"
+          # 
+          # args:
+          #   - "--example-argument"
+          #   - "{{ .Values.app.exampleValue }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          {% comment %} Unable this if u have livenessProbe in your app
-          livenessProbe:
-            httpGet:
-              path: /liveness
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /readiness
-              port: http {% endcomment %}
+          # Enable this if u have liveness/readiness Probe in your app
+          # livenessProbe:
+          #   httpGet:
+          #     path: /liveness
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /readiness
+          #     port: http
+          envFrom:
+            - secretRef:
+                name: "{{ include "helm.fullname" . }}-secret"
+          # Enable this if u re using a configmap
+          # volumeMounts:
+          #   - name: app-cfg-volume
+          #     mountPath: /config
+          #     readOnly: true
+      # volumes:
+      #   - name: app-cfg-volume
+      #     configMap:
+      #       name: {{ include "helm.fullname" .}}-server-config
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
