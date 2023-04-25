@@ -7,7 +7,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ include "helmcicdgenerator.fullname" . }}
+      {{- include "helmcicdgenerator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -15,7 +15,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "helmcicdgenerator.fullname" . }}
+        {{- include "helmcicdgenerator.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -37,3 +37,17 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ include "helmcicdgenerator.fullname" . }}-secret"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
