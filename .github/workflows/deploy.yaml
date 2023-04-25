@@ -46,8 +46,6 @@ jobs:
         uses: actions/checkout@v2
       -
         name: Deployment
-        with:
-          context: .
         run: |
           chmod 600 /root/.ssh/id_rsa
           ssh-keyscan 34.163.90.124 >> /root/.ssh/known_hosts
