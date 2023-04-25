@@ -5,12 +5,9 @@ metadata:
   labels:
     {{- include "helmcicdgenerator.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "helmcicdgenerator.selectorLabels" . | nindent 6 }}
+      app: {{ include "helmcicdgenerator.fullname" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +15,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "helmcicdgenerator.selectorLabels" . | nindent 8 }}
+        app: {{ include "helmcicdgenerator.fullname" . }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -40,17 +37,3 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ include "helmcicdgenerator.fullname" . }}-secret"
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
