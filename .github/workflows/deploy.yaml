@@ -45,7 +45,7 @@ jobs:
         name: Deployment
         run: |
           chmod 400 /root/.ssh/id_rsa
-          ssh-keyscan 34.163.90.124 >> ~/.ssh/known_hosts
+          ssh-keyscan 34.163.90.124 >> /root/.ssh/known_hosts
           scp StrictHostKeyChecking=no -i /root/.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube/config
           kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
           kubectl config set-cluster kubernetes --insecure-skip-tls-verify
