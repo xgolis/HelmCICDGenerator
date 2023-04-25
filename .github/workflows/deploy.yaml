@@ -1,8 +1,8 @@
 name: CI
 
 env:
-  NAMESPACE: change me 
-  APPNAME: change me
+  NAMESPACE: default
+  APPNAME: helmcicdgenerator
 
 on: [push]
 
@@ -33,7 +33,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/$APPNAME
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{env.APPNAME}}
 
   deploy:
     runs-on: ubuntu-22.04
@@ -47,13 +47,13 @@ jobs:
           scp -i ./.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube/config
           kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
           kubectl config set-cluster kubernetes --insecure-skip-tls-verify
-          kubectl get pods --namespace=$NAMESPACE
+          kubectl get pods --namespace=${{env.NAMESPACE}}
           
           helm upgrade $APPNAME
           ./helm/$APPNAME
           --install
           -n $NAMESPACE
-          --set "image.fullImage=${{ secrets.DOCKERHUB_USERNAME }}/$APPNAME:latest"
+          --set "image.fullImage=${{ secrets.DOCKERHUB_USERNAME }}/${{env.APPNAME}}:latest"
           --set "app.namespace=$NAMESPACE"
           --set "app.examplePassword=pass"
         # --set-file "app.exampleConfig=/path/to/config"
