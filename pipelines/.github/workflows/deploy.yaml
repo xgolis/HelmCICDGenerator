@@ -33,10 +33,11 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/$APPNAME:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/$APPNAME
 
   deploy:
     runs-on: ubuntu-22.04
+    needs: build
     container:
       image: xgolis/deployimage:latest
     steps:
