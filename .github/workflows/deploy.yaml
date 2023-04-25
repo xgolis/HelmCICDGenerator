@@ -52,11 +52,11 @@ jobs:
           kubectl config set-cluster kubernetes --insecure-skip-tls-verify
           kubectl get pods --namespace=${{env.NAMESPACE}}
           
-          helm upgrade $APPNAME \
-          ./helm/$APPNAME \ 
+          helm upgrade ${{env.APPNAME}} \
+          ./helm/${{env.APPNAME}} \ 
           --install \
-          -n $NAMESPACE \
+          -n ${{env.NAMESPACE}} \
           --set "image.fullImage=${{ secrets.DOCKERHUB_USERNAME }}/${{env.APPNAME}}:latest" \
-          --set "app.namespace=$NAMESPACE" \
+          --set "app.namespace=${{env.NAMESPACE}}" \
           --set "app.examplePassword=pass"
         # --set-file "app.exampleConfig=/path/to/config"
