@@ -39,7 +39,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8081
 
 # ingress:
 #   enabled: false
@@ -78,7 +78,7 @@ affinity: {}
 
 app:
   namespace: change me!
-  nodePort: change me
+  nodePort: 31932
   exampleValue: change me
   examplePassword: change me
   exampleConfig: change me

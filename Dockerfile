@@ -1,8 +1,9 @@
 FROM golang:latest
+WORKDIR /app
 COPY . .
-RUN CGO_ENABLE=0 go install \
-    -v --work \
-    ./cmd/...
-RUN env
-COPY ~/go/HelmCICDGenerator .
-ENTRYPOINT [ "/usr/local/bin/HelmCICDGenerator" ]
+RUN go mod download
+RUN cd cmd/HelmCICDGenerator && \
+    CGO_ENABLE=0 GOOS=linux go build -o ../../HelmCICDGenerator && \
+    cd ../..
+EXPOSE 8081
+ENTRYPOINT [ "./HelmCICDGenerator" ]
