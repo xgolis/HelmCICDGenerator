@@ -70,6 +70,12 @@ resources: {}
 #   memory: 128Mi
 # targetMemoryUtilizationPercentage: 80
 
+autoscaling:
+  enable: false
+  minReplicas: 1
+  maxReplicas: 2
+  
+
 nodeSelector: {}
 
 tolerations: []
