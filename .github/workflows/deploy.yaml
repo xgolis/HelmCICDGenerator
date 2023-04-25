@@ -7,15 +7,15 @@ env:
 on: [push]
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+  # docker:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     -
+  #       name: Checkout
+  #       uses: actions/checkout@v3
+  #     -
+  #       name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v2
       # -
       #   name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
@@ -37,7 +37,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-22.04
-    needs: docker
+    # needs: docker
     container:
       image: xgolis/deployimage:latest
     steps:
@@ -46,8 +46,8 @@ jobs:
         run: |
           chmod 400 /root/.ssh/id_rsa
           ssh-keyscan 34.163.90.124 >> /root/.ssh/known_hosts
-          mkdir /root/.kube
-          scp StrictHostKeyChecking=no -i /root/.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config /root/.kube/config
+          mkdir ~/.kube
+          scp StrictHostKeyChecking=no -i /root/.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube/config
           kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
           kubectl config set-cluster kubernetes --insecure-skip-tls-verify
           kubectl get pods --namespace=${{env.NAMESPACE}}
