@@ -21,7 +21,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "helmcicdgenerator.serviceAccountName" . }}
+      serviceAccountName: {{ .Values.app.namespace}}/{{ include "helmcicdgenerator.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
