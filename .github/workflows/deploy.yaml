@@ -37,7 +37,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-22.04
-    needs: docker
+    # needs: docker
     container:
       image: xgolis/deployimage:latest
     steps:
