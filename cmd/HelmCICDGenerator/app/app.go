@@ -24,7 +24,7 @@ func NewApp() *App {
 
 	return &App{
 		Server: &http.Server{
-			Addr:           ":8080",
+			Addr:           "0.0.0.0:8081",
 			Handler:        mux,
 			ReadTimeout:    50 * time.Second,
 			WriteTimeout:   50 * time.Second,
