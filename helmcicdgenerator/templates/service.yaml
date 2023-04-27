@@ -18,6 +18,6 @@ spec:
     protocol: TCP
     targetPort: {{ .Values.service.port }}
   selector:
-    app: {{ include "helmcicdgenerator.fullname" . }}
+    {{- include "helmcicdgenerator.selectorLabels" . | nindent 6 }}
   sessionAffinity: None
   type: LoadBalancer
