@@ -48,7 +48,7 @@ jobs:
         name: Deployment
         run: |
           ssh-keyscan 34.163.90.124 >> /root/.ssh/known_hosts
-          chmod 600 /root/.ssh/id_rsa
+          chmod 400 /root/.ssh/id_rsa
           mkdir ~/.kube
           scp -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube
           kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
