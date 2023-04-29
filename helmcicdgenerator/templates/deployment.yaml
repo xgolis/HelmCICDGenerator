@@ -16,9 +16,12 @@ spec:
       {{- end }}
       labels:
         {{- include "helmcicdgenerator.selectorLabels" . | nindent 8 }}
+        date: "{{ now | unixEpoch}}"
     spec:
       {{- with .Values.imagePullSecrets }}
-      imagePullSecrets: Always
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "helmcicdgenerator.fullname" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
