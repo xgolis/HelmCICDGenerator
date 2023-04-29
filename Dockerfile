@@ -7,8 +7,8 @@ RUN cd cmd/HelmCICDGenerator && \
     cd ../..
 
 FROM redhat/ubi8:latest
-COPY --from=build /app/helm .
-COPY --from=build /app/pipelines .
+COPY --from=build /app/helm ./helm
+COPY --from=build /app/pipelines ./pipelines
 COPY --from=build /app/HelmCICDGenerator .
 EXPOSE 8081
 ENTRYPOINT [ "./HelmCICDGenerator" ]
