@@ -16,6 +16,7 @@ type UserApp struct {
 	UserName string `json:"username"`
 	Image    string `json:"image"`
 	Port     string `json:"port"`
+	AppPort  string `json:"appport"`
 }
 
 func NewApp() *App {

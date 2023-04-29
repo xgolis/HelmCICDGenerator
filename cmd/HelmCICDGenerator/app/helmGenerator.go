@@ -66,6 +66,9 @@ func changeValuesChart(prefix string, app UserApp) error {
 		if strings.Contains(line, " nodePort:") {
 			lines[i] = "  nodePort: " + app.Port
 		}
+		if strings.Contains(line, "  port:") {
+			lines[i] = "  port: " + app.AppPort
+		}
 	}
 	output := strings.Join(lines, "\n")
 	err = ioutil.WriteFile(prefix+"/values.yaml", []byte(output), 0644)

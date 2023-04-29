@@ -21,6 +21,7 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "error while parsing json from request body: %v", err)
 		return
 	}
+	fmt.Println(app)
 	_, err = os.ReadDir("./" + app.Name)
 	if err == nil {
 		os.RemoveAll("./" + app.Name)
@@ -29,25 +30,25 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 
 	err = os.Mkdir(app.Name, os.ModePerm)
 	if err != nil {
-		fmt.Printf("error while creating a new dir")
+		fmt.Println("error while creating a new dir")
 		return
 	}
 
 	err = os.Mkdir(app.Name+"/helm", os.ModePerm)
 	if err != nil {
-		fmt.Printf("error while creating a new dir")
+		fmt.Println("error while creating a new dir")
 		return
 	}
 
 	err = createHelmChart(*app)
 	if err != nil {
-		fmt.Printf("error while creating a new helm chart")
+		fmt.Println("error while creating a new helm chart")
 		return
 	}
 
 	err = createCICDPipelines(*app)
 	if err != nil {
-		fmt.Printf("error while creating a new helm chart")
+		fmt.Println("error while creating a new pipelines")
 		return
 	}
 
