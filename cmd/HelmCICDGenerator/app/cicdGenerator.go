@@ -11,17 +11,18 @@ import (
 func createCICDPipelines(app UserApp) error {
 	prefix := "./pipelines"
 
+	cp.Copy(prefix+"/.gitlab-ci.yml", "./"+app.Name)
+	cp.Copy(prefix+"/.github", "./"+app.Name)
+
 	err := createGitlabPipeline(prefix, app)
 	if err != nil {
 		return fmt.Errorf("error while creating gitlab pipeline: %v", err)
 	}
-	cp.Copy(prefix+"/.gitlab-ci.yml", "./"+app.Name)
 
 	err = createGithubPipeline(prefix, app)
 	if err != nil {
-		return fmt.Errorf("error while creating gitlab pipeline: %v", err)
+		return fmt.Errorf("error while creating github pipeline: %v", err)
 	}
-	cp.Copy(prefix+"/.github", "./"+app.Name)
 
 	return nil
 }
