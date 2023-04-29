@@ -30,25 +30,28 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 
 	err = os.Mkdir(app.Name, os.ModePerm)
 	if err != nil {
-		fmt.Println("error while creating a new dir")
+		fmt.Printf("error while creating a new dir: %v\n", err)
 		return
 	}
 
 	err = os.Mkdir(app.Name+"/helm", os.ModePerm)
 	if err != nil {
-		fmt.Println("error while creating a new dir")
+		fmt.Printf("error while creating a new dir: %v\n", err)
+		// fmt.Println("error while creating a new dir")
 		return
 	}
 
 	err = createHelmChart(*app)
 	if err != nil {
-		fmt.Println("error while creating a new helm chart")
+		// fmt.Println("error while creating a new helm chart")
+		fmt.Printf("error while creating a new helm chart: %v\n", err)
 		return
 	}
 
 	err = createCICDPipelines(*app)
 	if err != nil {
-		fmt.Println("error while creating a new pipelines")
+		fmt.Printf("error while creating a new pipelines: %v\n", err)
+		// fmt.Println("error while creating a new pipelines")
 		return
 	}
 
