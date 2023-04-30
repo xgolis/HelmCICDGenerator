@@ -12,7 +12,7 @@ func createCICDPipelines(app UserApp) error {
 	prefix := "./pipelines"
 
 	cp.Copy(prefix+"/.gitlab-ci.yml", "./"+app.Name)
-	cp.Copy(prefix+"/.github", "./"+app.Name)
+	cp.Copy(prefix+"/.github", "./"+app.Name+"/.github")
 
 	err := createGitlabPipeline(prefix, app)
 	if err != nil {

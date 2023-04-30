@@ -41,6 +41,13 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = os.Mkdir(app.Name+"/.github", os.ModePerm)
+	if err != nil {
+		fmt.Printf("error while creating a new dir: %v\n", err)
+		// fmt.Println("error while creating a new dir")
+		return
+	}
+
 	err = createHelmChart(*app)
 	if err != nil {
 		// fmt.Println("error while creating a new helm chart")
