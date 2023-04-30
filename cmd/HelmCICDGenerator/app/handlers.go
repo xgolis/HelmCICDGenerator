@@ -66,7 +66,7 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 	// tar.Create("tmp/" + app.Name + ".tar")
 	// tar.AddAll(app.Name, false)
 	// defer tar.Close()
-	cmd := exec.Command("tar", "-cf", "tmp/"+app.Name+".tar", "app.Name")
+	cmd := exec.Command("tar", "-cf", "tmp/"+app.Name+".tar", app.Name)
 
 	// Set the working directory for the command (optional)
 	// cmd.Dir = "./"
