@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-
-	"github.com/jhoonb/archivex"
+	"os/exec"
 )
 
 func MakeHandlers() *http.ServeMux {
@@ -63,10 +62,24 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	os.MkdirAll("tmp/", 0755)
-	tar := new(archivex.TarFile)
-	tar.Create("tmp/" + app.Name + ".tar")
-	tar.AddAll(app.Name, false)
-	defer tar.Close()
+	// tar := new(archivex.TarFile)
+	// tar.Create("tmp/" + app.Name + ".tar")
+	// tar.AddAll(app.Name, false)
+	// defer tar.Close()
+	cmd := exec.Command("tar", "-cf", "tmp/"+app.Name+".tar", "app.Name")
+
+	// Set the working directory for the command (optional)
+	// cmd.Dir = "./"
+
+	// Set the standard output and error for the command
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	// Run the command and wait for it to finish
+	if err := cmd.Run(); err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/x-tar")
 	w.Header().Set("Content-Disposition", "attachment; filename=tmp/"+app.Name+".tar")
