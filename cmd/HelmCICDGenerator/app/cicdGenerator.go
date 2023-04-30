@@ -77,7 +77,7 @@ func createGithubPipeline(prefix string, app UserApp) error {
 	output := strings.Join(lines, "\n")
 	err = ioutil.WriteFile("./"+app.Name+"/.github/workflows/deploy.yaml", []byte(output), 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("dir not created: %v", err)
 	}
 
 	return nil
