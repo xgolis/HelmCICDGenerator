@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: appsv1
 kind: Deployment
 metadata:
   name: {{ include "helm.fullname" . }}
