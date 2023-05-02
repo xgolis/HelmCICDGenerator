@@ -4,12 +4,11 @@ stages:
 - deploy
 
 variables:
-  NAMESPACE: jojo
-  APPNAME: kkt
+  NAMESPACE: change me
+  APPNAME: change me
 
 build_image:
   stage: build
-  # https://www.youtube.com/watch?v=qP8kir2GUgo&ab_channel=TechWorldwithNana
   image: docker:20.10.16
   services:
   - docker:20.10.16-dind
@@ -26,16 +25,16 @@ deploy:
   stage: deploy
   image: xgolis/deployimage:latest
   script:
-  - scp -i ./.ssh/id_rsa xgolis@34.163.90.124:/home/xgolis/.kube/config ~/.kube/config
-  - kubectl config set-cluster kubernetes --server=https://34.163.90.124:6443
+  - chmod 400 /root/.ssh/id_rsa
+  - ssh-keyscan 35.240.30.14 >> /root/.ssh/known_hosts
+  - mkdir ~/.kube
+  - scp -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa xgolis@35.240.30.14:/home/xgolis/.kube/config ~/.kube
+  - kubectl config set-cluster kubernetes --server=https://35.240.30.14:6443
   - kubectl config set-cluster kubernetes --insecure-skip-tls-verify
-  - kubectl get pods --namespace=$NAMESPACE
-  # Add values to to helm upgrade if needed
-  - helm upgrade $APPNAME 
-    ./helm/$APPNAME 
-    --install 
-    -n $NAMESPACE
-    --set "image.fullImage=$DOCKER_USER/$APPNAME:latest"
-    --set "app.namespace=$NAMESPACE" 
-    --set "app.examplePassword='pass'"
+  - kubectl get pods --namespace=${{env.NAMESPACE}}
+
+  - helm upgrade ${{env.APPNAME}} ./${{env.APPNAME}} \
+      --install -n ${{env.NAMESPACE}} --version ${{ github.sha }} \
+      --set "image.fullImage=${{ secrets.DOCKERHUB_USERNAME }}/${{env.APPNAME}}:latest" \
+      --set "app.namespace=${{env.NAMESPACE}}" --force
   # --set-file "app.exampleConfig="/path/to/config""

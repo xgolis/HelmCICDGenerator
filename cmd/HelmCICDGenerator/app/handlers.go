@@ -20,7 +20,7 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "error while parsing json from request body: %v", err)
 		return
 	}
-	fmt.Println(app)
+	// fmt.Println(app)
 	_, err = os.ReadDir("./" + app.Name)
 	if err == nil {
 		os.RemoveAll("./" + app.Name)
