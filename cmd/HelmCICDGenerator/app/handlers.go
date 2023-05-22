@@ -81,6 +81,9 @@ func getCharts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	w.Header().Set("Content-Type", "application/x-tar")
 	w.Header().Set("Content-Disposition", "attachment; filename=tmp/"+app.Name+".tar")
 	http.ServeFile(w, r, "tmp/"+app.Name+".tar")
