@@ -47,7 +47,8 @@ jobs:
           chmod 400 /root/.ssh/id_rsa
           ssh-keyscan 35.240.30.14 >> /root/.ssh/known_hosts
           mkdir ~/.kube
-          scp -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa xgolis@35.240.30.14:/home/xgolis/.kube/config ~/.kube
+          scp -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa \
+            xgolis@35.240.30.14:/home/xgolis/.kube/config ~/.kube
           kubectl config set-cluster kubernetes --server=https://35.240.30.14:6443
           kubectl config set-cluster kubernetes --insecure-skip-tls-verify
           kubectl get pods --namespace=${{env.NAMESPACE}}
